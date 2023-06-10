@@ -1,11 +1,4 @@
-.list {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  list-style: none;
-}
-
-/* .card {
+.card {
   position: relative;
   max-width: 200px;
   border: 1px solid black;
@@ -37,4 +30,4 @@ img {
 
 .icon.favourite {
   fill: red;
-} */
+}

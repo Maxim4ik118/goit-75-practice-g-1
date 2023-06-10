@@ -14,13 +14,35 @@ export class App extends Component {
     this.setState(({ books }) => ({ books: [...books, newBook] }));
   };
 
+  handleBookDelete = id => {
+    this.setState({ books: this.state.books.filter(item => item.id !== id) });
+  };
+
+  handleFavourites = id => {
+    this.setState({
+      books: this.state.books.map(item => {
+        if (item.id === id) {
+          return {
+            ...item,
+            favourite: !item.favourite,
+          };
+        }
+        return item;
+      }),
+    });
+  };
+
   render() {
     const { books } = this.state;
 
     return (
       <div>
         <BookFrom onSubmit={this.handleSubmitForm} />
-        <BooksList booksList={books} />
+        <BooksList
+          booksList={books}
+          handleFavourites={this.handleFavourites}
+          handleBookDelete={this.handleBookDelete}
+        />
       </div>
     );
   }

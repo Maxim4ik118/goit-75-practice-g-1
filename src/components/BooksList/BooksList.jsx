@@ -1,22 +1,53 @@
 import PropTypes from 'prop-types';
 import css from './BooksList.module.css';
+import BookItem from 'components/BookItem/BookItem';
 
-export const BooksList = ({ booksList }) => (
-  <ul className={css.list}>
-    {Array.isArray(booksList) &&
-      booksList.map(({ id, title, cover, author, year, genre }) => (
-        <li key={id}>
-          <div className={css.card}>
-            <h2>{title}</h2>
-            <img src={cover} alt={title} />
-            <p>{author}</p>
-            <p>{year}</p>
-            <p>{genre}</p>
-          </div>
-        </li>
-      ))}
-  </ul>
-);
+export const BooksList = ({
+  booksList,
+  handleFavourites,
+  handleBookDelete,
+}) => {
+  const favouriteBooks = booksList.filter(book => book.favourite);
+  const nonFavouriteBooks = booksList.filter(book => !book.favourite);
+  return (
+    <ul className={css.list}>
+      {Array.isArray(favouriteBooks) &&
+        favouriteBooks.map(
+          ({ id, title, cover, author, year, genre, favourite }) => (
+            <BookItem
+              key={id}
+              id={id}
+              title={title}
+              cover={cover}
+              author={author}
+              year={year}
+              genre={genre}
+              favourite={favourite}
+              handleFavourites={handleFavourites}
+              handleBookDelete={handleBookDelete}
+            />
+          )
+        )}
+      {Array.isArray(nonFavouriteBooks) &&
+        nonFavouriteBooks.map(
+          ({ id, title, cover, author, year, genre, favourite }) => (
+            <BookItem
+              key={id}
+              id={id}
+              title={title}
+              cover={cover}
+              author={author}
+              year={year}
+              genre={genre}
+              favourite={favourite}
+              handleFavourites={handleFavourites}
+              handleBookDelete={handleBookDelete}
+            />
+          )
+        )}
+    </ul>
+  );
+};
 
 BooksList.propTypes = {
   booksList: PropTypes.arrayOf(
