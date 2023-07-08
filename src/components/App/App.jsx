@@ -1,49 +1,29 @@
-import { Component } from 'react';
-import { nanoid } from 'nanoid';
-import { BookFrom } from 'components/BookFrom';
-import { BooksList } from 'components/BooksList';
-import booksData from 'db/books.json';
+import Loader from 'components/Loader/Loader';
+import { Suspense, lazy } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
 
-export class App extends Component {
-  state = {
-    books: booksData.books, // [{...}, {...} , ...newBook]
-  };
+const Home = lazy(() => import('pages/Home'));
+const Search = lazy(() => import('pages/Search'));
+const Details = lazy(() => import('pages/Details'));
 
-  handleSubmitForm = book => {
-    const newBook = { id: nanoid(), ...book };
-    this.setState(({ books }) => ({ books: [...books, newBook] }));
-  };
-
-  handleBookDelete = id => {
-    this.setState({ books: this.state.books.filter(item => item.id !== id) });
-  };
-
-  handleFavourites = id => {
-    this.setState({
-      books: this.state.books.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            favourite: !item.favourite,
-          };
-        }
-        return item;
-      }),
-    });
-  };
-
-  render() {
-    const { books } = this.state;
-
-    return (
-      <div>
-        <BookFrom onSubmit={this.handleSubmitForm} />
-        <BooksList
-          booksList={books}
-          handleFavourites={this.handleFavourites}
-          handleBookDelete={this.handleBookDelete}
-        />
-      </div>
-    );
-  }
+export function App() {
+  return (
+    <div>
+      <header>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/search">Search</Link>
+        </nav>
+      </header>
+      <main>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/posts/:postId/*" element={<Details />} />
+            <Route path="/search" element={<Search />} />
+          </Routes>
+        </Suspense>
+      </main>
+    </div>
+  );
 }
